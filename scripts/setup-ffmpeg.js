@@ -88,11 +88,9 @@ function download(url, dest, redirects = 0) {
 
   console.log('正在解压…');
   fs.rmSync(TMP, { recursive: true, force: true });
-  // 用 PowerShell 解压（Windows 自带，无需额外依赖）
-  execFileSync('powershell', [
-    '-NoProfile', '-Command',
-    `Expand-Archive -LiteralPath '${ZIP}' -DestinationPath '${TMP}' -Force`,
-  ], { stdio: 'inherit' });
+  fs.mkdirSync(TMP, { recursive: true });
+  // 用 Windows 自带 tar 解压（bsdtar 支持 zip；Expand-Archive 在 PowerShell 7 下会报错）
+  execFileSync('tar', ['-xf', ZIP, '-C', TMP], { stdio: 'inherit' });
 
   const find = (dir, name) => {
     let out = null;
