@@ -3,9 +3,6 @@ name: Build Windows
 on:
   workflow_dispatch:
 
-permissions:
-  contents: write
-
 jobs:
   build-windows:
     runs-on: windows-latest
@@ -44,11 +41,3 @@ jobs:
             dist/*.zip
             dist/*.exe
           if-no-files-found: warn
-
-      - name: Prepare release assets
-        run: node scripts/prepare-release-assets.js
-
-      - name: Publish release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh release create v1.1.1 --title "红果短剧下载器 v1.1.1" --notes "自制构建 v1.1.1，基于 zhenyong97/hongguo-downloader v1.1.0，接口与数据目录与原版一致。绿色版 zip 解压后双击 红果短剧下载器.exe 运行；便携版 exe 双击直接运行。" dist/release/hongguo-downloader-1.1.1-win-x64.zip dist/release/hongguo-downloader-1.1.1-portable.exe
